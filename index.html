@@ -216,6 +216,20 @@
         .getgems-link {
             margin-top: 15px;
         }
+        .donation-link {
+            margin-top: 20px;
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: block;
+            cursor: pointer;
+        }
+        
+        .donation-link:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -239,6 +253,7 @@
     <img id="gift-image" alt="Изображение дара" width="400" height="400">
     <a href="https://t.me/YupLand_bot/Yupalka_DarAi?startapp=637640467" class="yupik-link" target="_blank">Больше даров в Юпике</a>
     <a href="https://getgems.io/yupland" class="yupik-link" target="_blank">Узнать больше о дарах</a>
+    <span class="donation-link" onclick="showDonationPopup()">Донат на развитие</span>
 
     <button class="donation-button" onclick="showDonationPopup()">
         <svg viewBox="0 0 24 24">
@@ -816,7 +831,6 @@
         }
         
         };
-
         function calculateGift() {
             const day = parseInt(document.getElementById('day').value);
             const month = parseInt(document.getElementById('month').value);
