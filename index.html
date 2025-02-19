@@ -1,92 +1,225 @@
-<html><head><base href="https://websim.m2.ai/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Дары от Юпика</title>
-<style>
-    body {
-        font-family: 'Arial', sans-serif;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-        margin: 0;
-        min-height: 100vh;
-        color: #333;
-    }
-    h1 {
-        color: #2c3e50;
-        margin-bottom: 30px;
-        text-align: center; 
-        font-size: 2.5em;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    }
-    .button-container, .input-container {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        margin-bottom: 30px;
-        width: 100%;
-        max-width: 400px;
-    }
-    input, button {
-        padding: 12px;
-        font-size: 16px;
-        border: none;
-        border-radius: 25px;
-        width: 100%;
-        box-sizing: border-box;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-    }
-    input:focus {
-        outline: none;
-        box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-    }
-    button {
-        background-color: #3498db;
-        color: white;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-    }
-    #result {
-        background-color: white;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        max-width: 600px;
-        width: 100%;
-        box-sizing: border-box;
-        margin-top: 20px;
-        display: none;
-    }
-    #gift-image {
-        max-width: 100%;
-        height: auto;
-        margin-top: 20px;
-        border-radius: 15px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        display: none;
-    }
-    .yupik-link, .getgems-link {
-        margin-top: 20px;
-        text-decoration: none;
-        color: #3498db;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        display: block;
-    }
-    .yupik-link:hover, .getgems-link:hover {
-        color: #2980b9;
-        text-decoration: underline;
-    }
-    .getgems-link {
-        margin-top: 15px;
-    }
-</style>
+<html>
+<head>
+    <base href="https://websim.m2.ai/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дары от Юпика</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            color: #333;
+            position: relative;
+        }
+        .info-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .info-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        /* New styles for donation */
+        .donation-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .donation-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        .donation-button svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 1001;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .popup h3 {
+            margin-top: 0;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .wallet-address {
+            background-color: #f7f9fc;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .wallet-address:hover {
+            background-color: #e3e8ee;
+        }
+
+        .wallet-address.clicked {
+            background-color: #d4e6f1;
+        }
+
+        .address-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-right: 10px;
+        }
+
+        .address-text {
+            color: #7f8c8d;
+            font-family: monospace;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #95a5a6;
+        }
+
+        .close-button:hover {
+            color: #7f8c8d;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center; 
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .button-container, .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 400px;
+        }
+        input, button {
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        input:focus {
+            outline: none;
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        #result {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 20px;
+            display: none;
+        }
+        #gift-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .yupik-link, .getgems-link {
+            margin-top: 20px;
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: block;
+        }
+        .yupik-link:hover, .getgems-link:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        .getgems-link {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
+    <a href="https://beta.mitte.gg/?contractAddress=darai.mintbase1.near" target="_blank" class="info-button">Узнать больше о дарах</a>
     <h1>🎁 Дары от Юпика</h1>
     
     <div class="button-container">
@@ -107,8 +240,30 @@
     <a href="https://t.me/YupLand_bot/Yupalka_DarAi?startapp=637640467" class="yupik-link" target="_blank">Больше даров в Юпике</a>
     <a href="https://getgems.io/yupland" class="yupik-link" target="_blank">Узнать больше о дарах</a>
 
-<script>
-const GIFTS = {
+    <button class="donation-button" onclick="showDonationPopup()">
+        <svg viewBox="0 0 24 24">
+            <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,17V16H9V14H13V13H10A1,1 0 0,1 9,12V9A1,1 0 0,1 10,8H11V7H13V8H15V10H11V11H14A1,1 0 0,1 15,12V15A1,1 0 0,1 14,16H13V17H11Z"/>
+        </svg>
+    </button>
+
+    <div class="popup-overlay" id="donationPopup">
+        <div class="popup">
+            <h3>Хочешь отблагодарить автора?</h3>
+            
+            <div class="wallet-address" onclick="copyToClipboard('near', 'donat1on.near')">
+                <span class="address-label">NEAR:</span>
+                <span class="address-text">donat1on.near</span>
+            </div>
+            
+            <div class="wallet-address" onclick="copyToClipboard('ton', 'UQBurTvcfmEtDfBdlPHR0BGPq7CPML3Luv_1_GuoUpNM5NXM')">
+                <span class="address-label">TON:</span>
+                <span class="address-text">UQBu...5NXM</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GIFTS = {
         "2-8-1": {
             "name": "дар Ла-Да",
             "ma_ji_kun": "Код дара: 2-8-1",
@@ -661,83 +816,109 @@ const GIFTS = {
         }
         
         };
-function calculateGift() {
-    const day = parseInt(document.getElementById('day').value);
-    const month = parseInt(document.getElementById('month').value);
-    const year = parseInt(document.getElementById('year').value);
 
-    if (!day || !month || !year) {
-        alert("Пожалуйста, заполните все поля даты");
-        return;
-    }
+        function calculateGift() {
+            const day = parseInt(document.getElementById('day').value);
+            const month = parseInt(document.getElementById('month').value);
+            const year = parseInt(document.getElementById('year').value);
 
-    const giftCode = calculateGiftCode(day, month, year);
-    displayGift(giftCode);
-}
+            if (!day || !month || !year) {
+                alert("Пожалуйста, заполните все поля даты");
+                return;
+            }
 
-function calculateDayGift() {
-    const today = new Date();
-    const giftCode = calculateGiftCode(
-        today.getDate(),
-        today.getMonth() + 1,
-        today.getFullYear()
-    );
-    displayGift(giftCode, "Дар сегодняшнего дня");
-}
+            const giftCode = calculateGiftCode(day, month, year);
+            displayGift(giftCode);
+        }
 
-function calculateDayEnergy() {
-    const firstNumber = Math.floor(Math.random() * 9) + 1;
-    const secondNumber = Math.floor(Math.random() * 9) + 1;
-    const thirdNumber = reduceToSingleDigit(firstNumber + secondNumber);
-    
-    const giftCode = `${firstNumber}-${secondNumber}-${thirdNumber}`;
-    displayGift(giftCode, "Энергия этого дня");
-}
+        function calculateDayGift() {
+            const today = new Date();
+            const giftCode = calculateGiftCode(
+                today.getDate(),
+                today.getMonth() + 1,
+                today.getFullYear()
+            );
+            displayGift(giftCode, "Дар сегодняшнего дня");
+        }
 
-function calculateGiftCode(day, month, year) {
-    const firstNumber = reduceToSingleDigit(day + month);
-    const secondNumber = reduceToSingleDigit(year);
-    const thirdNumber = reduceToSingleDigit(firstNumber + secondNumber);
-    
-    return `${firstNumber}-${secondNumber}-${thirdNumber}`;
-}
+        function calculateDayEnergy() {
+            const firstNumber = Math.floor(Math.random() * 9) + 1;
+            const secondNumber = Math.floor(Math.random() * 9) + 1;
+            const thirdNumber = reduceToSingleDigit(firstNumber + secondNumber);
+            
+            const giftCode = `${firstNumber}-${secondNumber}-${thirdNumber}`;
+            displayGift(giftCode, "Энергия этого дня");
+        }
 
-function displayGift(giftCode, title = "Твой дар") {
-    const gift = GIFTS[giftCode];
-    const resultDiv = document.getElementById('result');
-    const giftImage = document.getElementById('gift-image');
-    const existingGemsLink = document.querySelector('.getgems-link');
-    if (existingGemsLink) {
-        existingGemsLink.remove();
-    }
+        function calculateGiftCode(day, month, year) {
+            const firstNumber = reduceToSingleDigit(day + month);
+            const secondNumber = reduceToSingleDigit(year);
+            const thirdNumber = reduceToSingleDigit(firstNumber + secondNumber);
+            
+            return `${firstNumber}-${secondNumber}-${thirdNumber}`;
+        }
 
-    resultDiv.style.display = 'block';
-    
-    if (gift) {
-        const [ma, ji, kun] = giftCode.split('-');
-        resultDiv.innerHTML = `
-            <h2>${title}: ${gift.name}</h2>
-            <p>Код: ${giftCode}</p>
-            <p>${gift.description}</p>
-            <p>Ма: ${ma}</p>
-            <p>Жи: ${ji}</p>
-            <p>Кун: ${kun}</p>
-            ${gift.getgems_url ? `<a href="${gift.getgems_url}" class="getgems-link" target="_blank">Узнать больше на GetGems</a>` : ''}
-        `;
-        giftImage.src = gift.image_url;
-        giftImage.style.display = 'block';
-    } else {
-        resultDiv.innerHTML = `<p>Извини, но для кода ${giftCode} дар пока не открыт.</p>`;
-        giftImage.style.display = 'none';
-    }
-}
+        function displayGift(giftCode, title = "Твой дар") {
+            const gift = GIFTS[giftCode];
+            const resultDiv = document.getElementById('result');
+            const giftImage = document.getElementById('gift-image');
+            const existingGemsLink = document.querySelector('.getgems-link');
+            if (existingGemsLink) {
+                existingGemsLink.remove();
+            }
 
-function reduceToSingleDigit(num) {
-    while (num > 9) {
-        num = String(num).split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
-    }
-    return num;
-}
-</script>
+            resultDiv.style.display = 'block';
+            
+            if (gift) {
+                const [ma, ji, kun] = giftCode.split('-');
+                resultDiv.innerHTML = `
+                    <h2>${title}: ${gift.name}</h2>
+                    <p>Код: ${giftCode}</p>
+                    <p>${gift.description}</p>
+                    <p>Ма: ${ma}</p>
+                    <p>Жи: ${ji}</p>
+                    <p>Кун: ${kun}</p>
+                    ${gift.getgems_url ? `<a href="${gift.getgems_url}" class="getgems-link" target="_blank">Узнать больше на GetGems</a>` : ''}
+                `;
+                giftImage.src = gift.image_url;
+                giftImage.style.display = 'block';
+            } else {
+                resultDiv.innerHTML = `<p>Извини, но для кода ${giftCode} дар пока не открыт.</p>`;
+                giftImage.style.display = 'none';
+            }
+        }
+
+        function reduceToSingleDigit(num) {
+            while (num > 9) {
+                num = String(num).split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
+            }
+            return num;
+        }
+
+        function showDonationPopup() {
+            document.getElementById('donationPopup').style.display = 'block';
+        }
+
+        function hideDonationPopup() {
+            document.getElementById('donationPopup').style.display = 'none';
+        }
+
+        document.getElementById('donationPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideDonationPopup();
+            }
+        });
+
+        function copyToClipboard(type, address) {
+            navigator.clipboard.writeText(address).then(() => {
+                const element = event.currentTarget;
+                element.classList.add('clicked');
+                
+                setTimeout(() => {
+                    element.classList.remove('clicked');
+                }, 300);
+            });
+        }
+    </script>
 </body>
 </html>
